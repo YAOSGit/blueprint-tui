@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"lib": ["esnext", "dom"],
+		"jsx": "react-jsx",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"noEmit": true,
+		"types": ["vitest/globals"]
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.test-d.ts"]
+}
