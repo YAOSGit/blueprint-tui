@@ -393,20 +393,15 @@ blueprint-tui/
 │   │   ├── useProcess/            # Process state management
 │   │   ├── useTour/               # Tour navigation state
 │   │   └── useUIState/            # UI focus and overlay state
-│   ├── loader/                    # .blueprint/ directory parser
-│   │   ├── frontmatterParser.ts   # YAML frontmatter extraction
-│   │   └── walker.ts              # Directory traversal and validation
 │   ├── providers/                 # React context providers
 │   │   ├── CommandsProvider/      # Keyboard command registry
 │   │   ├── ProcessProvider/       # Process spawning and lifecycle
 │   │   ├── TourProvider/          # Tour state and navigation
 │   │   └── UIStateProvider/       # Focus, scroll, and overlay state
-│   ├── runner/                    # Command execution
-│   │   ├── oneShot.ts             # Run-to-completion commands
-│   │   └── persistent.ts          # Long-running process management
-│   ├── teleport/                  # Editor integration
-│   │   ├── editorDetector.ts      # Auto-detect installed editor
-│   │   └── index.ts               # Build and execute editor commands
+│   ├── utils/                     # Pure utility functions
+│   │   ├── loader/                # .blueprint/ directory parser
+│   │   ├── runner/                # Command execution (one-shot, persistent)
+│   │   └── teleport/              # Editor detection and file opening
 │   └── types/                     # TypeScript type definitions
 │       ├── Process/               # Process state types
 │       ├── Tour/                  # Tour, Chapter, Step Zod schemas

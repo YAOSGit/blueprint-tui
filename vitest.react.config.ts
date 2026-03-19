@@ -1,20 +1,18 @@
-import { defineConfig } from 'vitest/config';
+import { resolve } from 'node:path';
+import { reactConfig } from '@yaos-git/toolkit/build';
 
-export default defineConfig({
-	define: {
-		__CLI_VERSION__: JSON.stringify('0.0.0-test'),
+const base = reactConfig();
+
+export default {
+	...base,
+	resolve: {
+		alias: {
+			react: resolve('node_modules/react'),
+			'react-dom': resolve('node_modules/react-dom'),
+			ink: resolve('node_modules/ink'),
+		},
 	},
 	test: {
-		name: { label: 'react', color: 'cyan' },
-		environment: 'jsdom',
-		globals: true,
-		typecheck: {
-			tsconfig: './tsconfig.vitest.json',
-		},
-		include: ['**/*.test.tsx'],
-		exclude: ['node_modules'],
-		sequence: {
-			groupOrder: 2,
-		},
+		...base.test,
 	},
-});
+};

@@ -28,10 +28,18 @@ function run(args: string[]): {
 }
 
 describe('blueprint-tui CLI', () => {
+	it('--help shows usage with "blueprint-tui" and lists subcommands', () => {
+		const { stdout, exitCode } = run(['--help']);
+		expect(exitCode).toBe(0);
+		expect(stdout).toContain('blueprint-tui');
+		expect(stdout).toContain('validate');
+		expect(stdout).toContain('list');
+	});
+
 	it('prints version', () => {
 		const { stdout, exitCode } = run(['--version']);
 		expect(exitCode).toBe(0);
-		expect(stdout).toContain('blueprint-tui v');
+		expect(stdout).toContain('blueprint-tui-cli/');
 	});
 
 	it('validates a valid tour', () => {

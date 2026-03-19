@@ -3,8 +3,8 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const prevStepCommand: CommandHandler = {
 	id: 'PREV_STEP',
-	keys: [],
-	displayKey: '←',
+	keys: [{ leftArrow: true }],
+	displayKey: '\u2190',
 	displayText: 'prev step',
 	helpSection: 'Navigation',
 	helpLabel: 'Previous step',
@@ -15,8 +15,8 @@ export const prevStepCommand: CommandHandler = {
 
 export const nextStepCommand: CommandHandler = {
 	id: 'NEXT_STEP',
-	keys: [],
-	displayKey: '→',
+	keys: [{ rightArrow: true }],
+	displayKey: '\u2192',
 	displayText: 'next step',
 	helpSection: 'Navigation',
 	helpLabel: 'Next step',
@@ -27,8 +27,8 @@ export const nextStepCommand: CommandHandler = {
 
 export const prevChapterCommand: CommandHandler = {
 	id: 'PREV_CHAPTER',
-	keys: [],
-	displayKey: 'Shift+←',
+	keys: [{ leftArrow: true, shift: true }],
+	displayKey: 'Shift\u00A0+\u00A0\u2190',
 	displayText: 'prev chapter',
 	helpSection: 'Navigation',
 	helpLabel: 'Previous chapter',
@@ -39,8 +39,8 @@ export const prevChapterCommand: CommandHandler = {
 
 export const nextChapterCommand: CommandHandler = {
 	id: 'NEXT_CHAPTER',
-	keys: [],
-	displayKey: 'Shift+→',
+	keys: [{ rightArrow: true, shift: true }],
+	displayKey: 'Shift\u00A0+\u00A0\u2192',
 	displayText: 'next chapter',
 	helpSection: 'Navigation',
 	helpLabel: 'Next chapter',
@@ -51,7 +51,7 @@ export const nextChapterCommand: CommandHandler = {
 
 export const cycleFocusCommand: CommandHandler = {
 	id: 'CYCLE_FOCUS',
-	keys: [],
+	keys: [{ specialKey: 'tab' }],
 	displayKey: 'Tab',
 	displayText: 'cycle focus',
 	helpSection: 'Navigation',
@@ -63,8 +63,8 @@ export const cycleFocusCommand: CommandHandler = {
 
 export const scrollUpCommand: CommandHandler = {
 	id: 'SCROLL_UP',
-	keys: [],
-	displayKey: '↑',
+	keys: [{ specialKey: 'up' }],
+	displayKey: '\u2191',
 	displayText: 'scroll up',
 	helpSection: 'Navigation',
 	helpLabel: 'Scroll pane',
@@ -81,8 +81,8 @@ export const scrollUpCommand: CommandHandler = {
 
 export const scrollDownCommand: CommandHandler = {
 	id: 'SCROLL_DOWN',
-	keys: [],
-	displayKey: '↓',
+	keys: [{ specialKey: 'down' }],
+	displayKey: '\u2193',
 	displayText: 'scroll down',
 	helpSection: 'Navigation',
 	helpLabel: undefined,

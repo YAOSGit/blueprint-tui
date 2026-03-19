@@ -1,5 +1,5 @@
 // src/providers/TourProvider/index.tsx
-import { createContext, useCallback, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import type { ValidationResult } from '../../types/Validation/index.js';
 import type {
 	TourContextValue,
@@ -8,12 +8,12 @@ import type {
 
 export const TourContext = createContext<TourContextValue | null>(null);
 
-export function TourProvider({
+export const TourProvider: React.FC<TourProviderProps> = ({
 	tour,
 	initialChapter,
 	initialStep,
 	children,
-}: TourProviderProps) {
+}) => {
 	const startChapterIdx = initialChapter
 		? Math.max(
 				0,
@@ -170,4 +170,4 @@ export function TourProvider({
 	);
 
 	return <TourContext.Provider value={value}>{children}</TourContext.Provider>;
-}
+};

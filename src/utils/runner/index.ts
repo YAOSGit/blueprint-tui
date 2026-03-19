@@ -1,4 +1,4 @@
-// src/runner/index.ts
+// src/utils/runner/index.ts
 
 export type { OneShotResult } from './oneShot.js';
 export { runOneShot } from './oneShot.js';

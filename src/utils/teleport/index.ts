@@ -1,6 +1,6 @@
-// src/teleport/index.ts
+// src/utils/teleport/index.ts
 import { spawn } from 'node:child_process';
-import type { Teleport } from '../types/Tour/index.js';
+import type { Teleport } from '../../types/Tour/index.js';
 
 export type TeleportCommand = {
 	bin: string;

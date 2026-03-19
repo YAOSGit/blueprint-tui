@@ -2,5 +2,5 @@
 export interface NarrativePaneProps {
 	body: string;
 	scrollOffset: number;
-	focused: boolean;
+	width?: number;
 }

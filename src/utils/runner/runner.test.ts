@@ -1,4 +1,4 @@
-// src/runner/runner.test.ts
+// src/utils/runner/runner.test.ts
 import { describe, expect, it } from 'vitest';
 import { runOneShot } from './oneShot.js';
 import { spawnPersistent } from './persistent.js';

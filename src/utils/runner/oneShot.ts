@@ -1,4 +1,4 @@
-// src/runner/oneShot.ts
+// src/utils/runner/oneShot.ts
 import { spawn } from 'node:child_process';
 
 export type OneShotResult = {
@@ -25,6 +25,15 @@ export function runOneShot(
 			timedOut = true;
 			child.kill('SIGTERM');
 		}, timeoutMs);
+
+		child.on('error', (err) => {
+			clearTimeout(timer);
+			resolve({
+				exitCode: 1,
+				output: chunks.join('') + err.message,
+				timedOut: false,
+			});
+		});
 
 		child.on('close', (code) => {
 			clearTimeout(timer);

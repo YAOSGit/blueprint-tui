@@ -18,7 +18,12 @@ import { teleportCommand } from '../../commands/teleport/index.js';
 import { validateCommand } from '../../commands/validate/index.js';
 import type { CommandHandler } from './CommandsProvider.types.js';
 
-export const COMMANDS: CommandHandler[] = [
+/**
+ * Project-specific commands. The toolkit's createCommandsProvider will
+ * append shared help, quit, scroll, and cycleFocus commands automatically.
+ * Project help/quit are listed first so they match before toolkit defaults.
+ */
+export const PROJECT_COMMANDS: CommandHandler[] = [
 	// Navigation
 	prevStepCommand,
 	nextStepCommand,

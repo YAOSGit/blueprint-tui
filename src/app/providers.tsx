@@ -1,5 +1,5 @@
 // src/app/providers.tsx
-import type React from 'react';
+import React from 'react';
 import { CommandsProvider } from '../providers/CommandsProvider/index.js';
 import { ProcessProvider } from '../providers/ProcessProvider/index.js';
 import { TourProvider } from '../providers/TourProvider/index.js';
@@ -16,7 +16,7 @@ export interface AppProvidersProps {
 	children: React.ReactNode;
 }
 
-export function AppProviders({
+export const AppProviders: React.FC<AppProvidersProps> = ({
 	tour,
 	projectRoot,
 	editorOverride,
@@ -24,7 +24,7 @@ export function AppProviders({
 	initialStep,
 	onQuit,
 	children,
-}: AppProvidersProps) {
+}) => {
 	return (
 		<TourProvider
 			tour={tour}
@@ -44,4 +44,4 @@ export function AppProviders({
 			</ProcessProvider>
 		</TourProvider>
 	);
-}
+};

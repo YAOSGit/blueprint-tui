@@ -1,4 +1,4 @@
-// src/loader/walker.test.ts
+// src/utils/loader/walker.test.ts
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { walkBlueprint } from './walker.js';

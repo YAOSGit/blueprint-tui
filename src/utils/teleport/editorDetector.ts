@@ -1,4 +1,4 @@
-// src/teleport/editorDetector.ts
+// src/utils/teleport/editorDetector.ts
 import { execFileSync } from 'node:child_process';
 
 const KNOWN_EDITORS = [

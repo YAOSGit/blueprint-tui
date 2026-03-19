@@ -1,4 +1,4 @@
-// src/teleport/editorDetector.test.ts
+// src/utils/teleport/editorDetector.test.ts
 import { describe, expect, it } from 'vitest';
 import { detectEditor } from './editorDetector.js';
 

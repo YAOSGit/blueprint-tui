@@ -3,11 +3,14 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const quitCommand: CommandHandler = {
 	id: 'QUIT',
-	keys: ['q'],
+	keys: [{ textKey: 'q' }],
 	displayKey: 'q',
 	displayText: 'quit',
 	helpSection: 'General',
+	helpLabel: 'Quit',
 	footer: 'priority',
-	isEnabled: () => true,
+	isEnabled: (deps) => deps.ui.activeOverlay === 'none',
 	execute: (deps) => deps.onQuit(),
+	needsConfirmation: () => true,
+	confirmMessage: 'Quit?',
 };

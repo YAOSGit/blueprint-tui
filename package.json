@@ -1,10 +1,11 @@
 {
 	"name": "@yaos-git/blueprint-tui",
-	"version": "126.0.0",
-	"description": "Interactive codebase onboarding TUI — turn docs into executable journeys",
+	"version": "126.1.0",
+	"description": "Interactive codebase onboarding TUI \u2014 turn docs into executable journeys",
 	"main": "dist/cli.js",
 	"bin": {
-		"blueprint-tui": "dist/cli.js"
+		"blueprint-tui": "dist/tui.js",
+		"blueprint-tui-cli": "dist/cli.js"
 	},
 	"files": [
 		"dist"
@@ -53,10 +54,11 @@
 	},
 	"license": "ISC",
 	"engines": {
-		"node": ">=18.0.0"
+		"node": ">=20"
 	},
 	"type": "module",
 	"dependencies": {
+		"@yaos-git/toolkit": "0.0.26-3-19a",
 		"chalk": "^5.6.2",
 		"commander": "^14.0.3",
 		"figlet": "^1.11.0",
@@ -64,24 +66,24 @@
 		"marked": "^15.0.0",
 		"marked-terminal": "^7.3.0",
 		"yaml": "^2.7.1",
-		"zod": "^3.25.0"
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.3.8",
+		"@biomejs/biome": "^2.4.8",
 		"@size-limit/file": "^11.2.0",
 		"@testing-library/react": "^16.3.0",
 		"@types/figlet": "^1.7.0",
-		"@types/node": "^25.0.1",
+		"@types/node": "^25.5.0",
 		"@types/react": "^19.2.7",
 		"@typescript/native-preview": "^7.0.0-dev.20251216",
-		"@vitest/coverage-v8": "^4.0.15",
+		"@vitest/coverage-v8": "^4.1.0",
 		"@yaos-git/run-tui": "^126.0.0",
 		"esbuild": "^0.27.1",
-		"ink": "^6.5.1",
+		"ink": "^6.8.0",
 		"ink-testing-library": "^4.0.0",
 		"jsdom": "^27.3.0",
-		"react": "^19.2.3",
+		"react": "^19.2.4",
 		"size-limit": "^11.2.0",
-		"vitest": "^4.0.15"
+		"vitest": "^4.1.0"
 	}
 }

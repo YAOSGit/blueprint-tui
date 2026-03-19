@@ -1,28 +1,34 @@
 // src/providers/CommandsProvider/index.tsx
 import path from 'node:path';
-import { useInput } from 'ink';
-import { createContext, useCallback, useMemo } from 'react';
+import { createCommandsProvider } from '@yaos-git/toolkit/tui/commands';
+import type { PendingConfirmation } from '@yaos-git/toolkit/types';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useProcess } from '../../hooks/useProcess/index.js';
 import { useTour } from '../../hooks/useTour/index.js';
 import { useUIState } from '../../hooks/useUIState/index.js';
-import { runOneShot } from '../../runner/oneShot.js';
-import { detectEditor } from '../../teleport/editorDetector.js';
-import { executeTeleport } from '../../teleport/index.js';
-import { COMMANDS } from './CommandsProvider.consts.js';
+import { runOneShot } from '../../utils/runner/oneShot.js';
+import { detectEditor } from '../../utils/teleport/editorDetector.js';
+import { executeTeleport } from '../../utils/teleport/index.js';
+import { PROJECT_COMMANDS } from './CommandsProvider.consts.js';
 import type {
 	CommandDeps,
-	CommandsContextValue,
 	CommandsProviderProps,
 } from './CommandsProvider.types.js';
 
-export const CommandsContext = createContext<CommandsContextValue | null>(null);
+const {
+	CommandsProvider: ToolkitCommandsProvider,
+	useCommands: toolkitUseCommands,
+	COMMANDS,
+} = createCommandsProvider<CommandDeps>(PROJECT_COMMANDS);
 
-export function CommandsProvider({
+export { COMMANDS };
+
+export const CommandsProvider: React.FC<CommandsProviderProps> = ({
 	onQuit,
 	projectRoot,
 	editorOverride,
 	children,
-}: CommandsProviderProps) {
+}) => {
 	const tour = useTour();
 	const proc = useProcess();
 	const uiState = useUIState();
@@ -90,8 +96,32 @@ export function CommandsProvider({
 		});
 	}, [tour]);
 
+	const [confirmation, setConfirmation] = useState<PendingConfirmation | null>(null);
+
+	const requestConfirmation = useCallback(
+		(message: string, onConfirm: () => void) => {
+			setConfirmation({ message, onConfirm });
+		},
+		[],
+	);
+
+	const clearConfirmation = useCallback(() => {
+		setConfirmation(null);
+	}, []);
+
 	const deps: CommandDeps = useMemo(
 		() => ({
+			ui: {
+				activeOverlay: confirmation ? 'confirmation' : uiState.activeOverlay as string | 'none',
+				setActiveOverlay: (overlay: string | 'none') => {
+					setConfirmation(null);
+					(uiState.setActiveOverlay as (o: string | 'none') => void)(overlay);
+				},
+				cycleFocus: uiState.cycleFocus,
+				confirmation,
+				requestConfirmation,
+				clearConfirmation,
+			},
 			tour,
 			uiState,
 			process: proc,
@@ -99,72 +129,16 @@ export function CommandsProvider({
 			onValidate,
 			onQuit,
 		}),
-		[tour, uiState, proc, onTeleport, onValidate, onQuit],
-	);
-
-	useInput((input, key) => {
-		// Escape dismisses overlays
-		if (key.escape) {
-			if (uiState.activeOverlay !== 'none') {
-				uiState.setActiveOverlay('none');
-				return;
-			}
-		}
-
-		// Arrow-key and Tab commands are handled via special key matching
-		// (they have empty `keys` arrays so won't match the text-input loop below)
-		if (key.tab) {
-			const cmd = COMMANDS.find((c) => c.id === 'CYCLE_FOCUS');
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-
-		if (key.upArrow || key.downArrow) {
-			const id = key.upArrow ? 'SCROLL_UP' : 'SCROLL_DOWN';
-			const cmd = COMMANDS.find((c) => c.id === id);
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-
-		if (key.shift && key.leftArrow) {
-			const cmd = COMMANDS.find((c) => c.id === 'PREV_CHAPTER');
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-		if (key.shift && key.rightArrow) {
-			const cmd = COMMANDS.find((c) => c.id === 'NEXT_CHAPTER');
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-
-		if (key.leftArrow) {
-			const cmd = COMMANDS.find((c) => c.id === 'PREV_STEP');
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-		if (key.rightArrow) {
-			const cmd = COMMANDS.find((c) => c.id === 'NEXT_STEP');
-			if (cmd?.isEnabled(deps)) cmd.execute(deps);
-			return;
-		}
-
-		// Match registered text-key commands
-		for (const cmd of COMMANDS) {
-			if (cmd.keys.includes(input) && cmd.isEnabled(deps)) {
-				cmd.execute(deps);
-				return;
-			}
-		}
-	});
-
-	const value: CommandsContextValue = useMemo(
-		() => ({ commands: COMMANDS, deps }),
-		[deps],
+		[tour, uiState, proc, onTeleport, onValidate, onQuit, confirmation, requestConfirmation, clearConfirmation],
 	);
 
 	return (
-		<CommandsContext.Provider value={value}>
+		<ToolkitCommandsProvider deps={deps}>
 			{children}
-		</CommandsContext.Provider>
+		</ToolkitCommandsProvider>
 	);
+};
+
+export function useCommands() {
+	return toolkitUseCommands();
 }

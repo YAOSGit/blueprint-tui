@@ -1,6 +1,7 @@
 // src/components/JumpOverlay/index.tsx
 import { Box, Text, useInput } from 'ink';
 import { useState } from 'react';
+import { theme } from '../../theme.js';
 import type { JumpOverlayProps } from './JumpOverlay.types.js';
 
 export function JumpOverlay({
@@ -56,7 +57,7 @@ export function JumpOverlay({
 		<Box
 			flexDirection="column"
 			borderStyle="double"
-			borderColor="cyan"
+			borderColor={theme.brand}
 			paddingX={1}
 			paddingY={1}
 		>
@@ -70,7 +71,7 @@ export function JumpOverlay({
 					const isSelected = i === selectedIdx;
 					return (
 						<Text key={`${entry.chapterId}:${entry.stepId}`}>
-							{isSelected ? <Text color="cyan">{'> '}</Text> : '  '}
+							{isSelected ? <Text color={theme.brand}>{'> '}</Text> : '  '}
 							<Text dimColor>{entry.chapterTitle}</Text>
 							<Text dimColor> / </Text>
 							<Text bold={isCurrent}>{entry.stepTitle}</Text>

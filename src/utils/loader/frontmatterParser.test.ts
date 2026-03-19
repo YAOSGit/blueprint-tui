@@ -1,4 +1,4 @@
-// src/loader/frontmatterParser.test.ts
+// src/utils/loader/frontmatterParser.test.ts
 import { describe, expect, it } from 'vitest';
 import { parseFrontmatter } from './frontmatterParser.js';
 

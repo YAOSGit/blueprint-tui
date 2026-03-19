@@ -3,7 +3,7 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const runAllCommand: CommandHandler = {
 	id: 'RUN_ALL',
-	keys: ['R'],
+	keys: [{ textKey: 'R' }],
 	displayKey: 'R',
 	displayText: 'run all',
 	helpSection: 'Actions (Shift)',

@@ -3,7 +3,7 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const runActionCommand: CommandHandler = {
 	id: 'RUN_ACTION',
-	keys: ['r'],
+	keys: [{ textKey: 'r' }],
 	displayKey: 'r',
 	displayText: 'run',
 	helpSection: 'Actions',

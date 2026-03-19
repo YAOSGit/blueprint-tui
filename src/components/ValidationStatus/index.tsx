@@ -1,5 +1,6 @@
 // src/components/ValidationStatus/index.tsx
 import { Box, Text } from 'ink';
+import { StatusIcon } from '@yaos-git/toolkit/tui/components';
 import type { ValidationStatusProps } from './ValidationStatus.types.js';
 
 export function ValidationStatus({
@@ -24,9 +25,24 @@ export function ValidationStatus({
 			{result ? (
 				<>
 					<Text>
-						{result.state === 'passing' && <Text color="green">✓ </Text>}
-						{result.state === 'failing' && <Text color="red">✗ </Text>}
-						{result.state === 'running' && <Text color="yellow">⟳ </Text>}
+						{result.state === 'passing' && (
+							<>
+								<StatusIcon status="success" />
+								<Text> </Text>
+							</>
+						)}
+						{result.state === 'failing' && (
+							<>
+								<StatusIcon status="error" />
+								<Text> </Text>
+							</>
+						)}
+						{result.state === 'running' && (
+							<>
+								<StatusIcon status="running" />
+								<Text> </Text>
+							</>
+						)}
 						{result.state === 'timeout' && <Text color="red">⏱ </Text>}
 						<Text dimColor>{validate.command}</Text>
 					</Text>

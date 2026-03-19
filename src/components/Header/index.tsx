@@ -1,5 +1,6 @@
 // src/components/Header/index.tsx
 import { Box, Text } from 'ink';
+import { theme } from '../../theme.js';
 import type { HeaderProps } from './Header.types.js';
 
 export function Header({
@@ -10,9 +11,9 @@ export function Header({
 	totalSteps,
 }: HeaderProps) {
 	return (
-		<Box borderStyle="round" borderColor="gray" paddingX={1}>
+		<Box width="100%" borderStyle="round" borderColor="gray" paddingX={1}>
 			<Text wrap="truncate">
-				<Text bold color="cyan">
+				<Text bold color={theme.brand}>
 					{tourName}
 				</Text>
 				<Text dimColor> › </Text>

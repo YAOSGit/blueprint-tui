@@ -1,17 +1,3 @@
-import { defineConfig } from 'vitest/config';
+import { typeConfig } from '@yaos-git/toolkit/build';
 
-export default defineConfig({
-	test: {
-		name: { label: 'types', color: 'magenta' },
-		typecheck: {
-			enabled: true,
-			checker: 'tsgo',
-			tsconfig: './tsconfig.vitest.json',
-		},
-		include: ['**/*.test-d.ts'],
-		exclude: ['node_modules'],
-		sequence: {
-			groupOrder: 3,
-		},
-	},
-});
+export default typeConfig();

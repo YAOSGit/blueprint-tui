@@ -1,11 +1,11 @@
-// src/loader/index.ts
+// src/utils/loader/index.ts
 import fs from 'node:fs';
 import path from 'node:path';
 import type {
 	ResolvedChapter,
 	ResolvedStep,
 	ResolvedTour,
-} from '../types/Tour/index.js';
+} from '../../types/Tour/index.js';
 import { parseFrontmatter } from './frontmatterParser.js';
 import { walkBlueprint } from './walker.js';
 

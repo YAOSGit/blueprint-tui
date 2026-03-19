@@ -1,5 +1,7 @@
 // src/components/ProcessOutput/index.tsx
-import { Box, Text } from 'ink';
+import { Text } from 'ink';
+import { FocusablePane } from '@yaos-git/toolkit/tui/components';
+import { theme } from '../../theme.js';
 import type { ProcessOutputProps } from './ProcessOutput.types.js';
 
 export function ProcessOutput({
@@ -13,14 +15,7 @@ export function ProcessOutput({
 	const visible = lines.slice(scrollOffset);
 
 	return (
-		<Box
-			flexDirection="column"
-			flexGrow={1}
-			borderStyle="round"
-			borderColor={focused ? 'cyan' : 'gray'}
-			paddingX={1}
-			overflow="hidden"
-		>
+		<FocusablePane focused={focused} theme={theme}>
 			<Text bold dimColor>
 				PROCESS OUTPUT {label && `[${label}]`}
 			</Text>
@@ -32,6 +27,6 @@ export function ProcessOutput({
 					</Text>
 				);
 			})}
-		</Box>
+		</FocusablePane>
 	);
 }

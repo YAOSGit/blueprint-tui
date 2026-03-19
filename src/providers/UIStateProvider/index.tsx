@@ -1,5 +1,5 @@
 // src/providers/UIStateProvider/index.tsx
-import {
+import React, {
 	createContext,
 	useCallback,
 	useEffect,
@@ -19,7 +19,9 @@ export const UIStateContext = createContext<UIStateContextValue | null>(null);
 const FOCUS_ORDER: FocusPane[] = ['narrative', 'actions', 'processOutput'];
 const STATUS_MESSAGE_DURATION = 3000;
 
-export function UIStateProvider({ children }: UIStateProviderProps) {
+export const UIStateProvider: React.FC<UIStateProviderProps> = ({
+	children,
+}) => {
 	const [focusPane, setFocusPane] = useState<FocusPane>('narrative');
 	const [activeOverlay, setActiveOverlay] = useState<ActiveOverlay>('none');
 	const [narrativeScroll, setNarrativeScroll] = useState(0);
@@ -89,4 +91,4 @@ export function UIStateProvider({ children }: UIStateProviderProps) {
 	return (
 		<UIStateContext.Provider value={value}>{children}</UIStateContext.Provider>
 	);
-}
+};

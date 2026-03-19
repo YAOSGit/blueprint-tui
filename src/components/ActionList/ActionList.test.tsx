@@ -166,6 +166,6 @@ describe('ActionList', () => {
 				onRun={noop}
 			/>,
 		);
-		expect(lastFrame()).toContain('>');
+		expect(lastFrame()).toContain('▸');
 	});
 });

@@ -1,20 +1,9 @@
 // src/components/ActionList/index.tsx
 import { Box, Text, useInput } from 'ink';
+import { StatusIcon } from '@yaos-git/toolkit/tui/components';
+import { theme } from '../../theme.js';
+import { STATUS_COLORS, STATUS_ICONS } from './ActionList.consts.js';
 import type { ActionListProps } from './ActionList.types.js';
-
-const STATUS_ICONS: Record<string, string> = {
-	idle: '▷',
-	running: '▶',
-	done: '✓',
-	failed: '✗',
-};
-
-const STATUS_COLORS: Record<string, string> = {
-	idle: 'gray',
-	running: 'yellow',
-	done: 'green',
-	failed: 'red',
-};
 
 export function ActionList({
 	actions,
@@ -41,14 +30,19 @@ export function ActionList({
 			{actions.map((action, i) => {
 				const proc = processes.get(action.label);
 				const status = proc?.status ?? 'idle';
-				const icon = STATUS_ICONS[status];
-				const color = STATUS_COLORS[status];
 				const selected = focused && i === selectedIndex;
 
 				return (
 					<Text key={action.label}>
-						{selected ? <Text color="cyan">{'> '}</Text> : '  '}
-						<Text color={color}>{icon}</Text> <Text>{action.label}</Text>
+						{selected ? <Text color={theme.brand}>{'▸ '}</Text> : '  '}
+						{status === 'done' ? (
+							<StatusIcon status="success" />
+						) : status === 'failed' ? (
+							<StatusIcon status="error" />
+						) : (
+							<Text color={STATUS_COLORS[status]}>{STATUS_ICONS[status]}</Text>
+						)}{' '}
+						<Text>{action.label}</Text>
 						{proc?.persistent && status === 'running' && (
 							<Text dimColor> (running)</Text>
 						)}

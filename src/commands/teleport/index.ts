@@ -3,7 +3,7 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const teleportCommand: CommandHandler = {
 	id: 'TELEPORT',
-	keys: ['o'],
+	keys: [{ textKey: 'o' }],
 	displayKey: 'o',
 	displayText: 'teleport',
 	helpSection: 'Actions',

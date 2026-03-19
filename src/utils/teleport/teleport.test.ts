@@ -1,4 +1,4 @@
-// src/teleport/teleport.test.ts
+// src/utils/teleport/teleport.test.ts
 import { describe, expect, it } from 'vitest';
 import { buildTeleportCommand } from './index.js';
 

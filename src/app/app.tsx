@@ -1,22 +1,42 @@
 // src/app/app.tsx
-import { Box, Text, useInput, useStdout } from 'ink';
-import { useEffect, useState } from 'react';
+import { SplitPane, TUILayout } from '@yaos-git/toolkit/tui/components';
+import { Text, useInput, useStdout } from 'ink';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityPane } from '../components/ActivityPane/index.js';
 import { Header } from '../components/Header/index.js';
-import { HelpOverlay } from '../components/HelpOverlay/index.js';
 import { JumpOverlay } from '../components/JumpOverlay/index.js';
 import { NarrativePane } from '../components/NarrativePane/index.js';
-import { ProgressFooter } from '../components/ProgressFooter/index.js';
+import { SECTION_COLORS } from '../providers/CommandsProvider/CommandsProvider.consts.js';
 import { useCommands } from '../hooks/useCommands/index.js';
 import { useProcess } from '../hooks/useProcess/index.js';
 import { useTour } from '../hooks/useTour/index.js';
 import { useUIState } from '../hooks/useUIState/index.js';
+import { theme } from '../theme.js';
+
+function useTermWidth(): number {
+	const { stdout } = useStdout();
+	const [width, setWidth] = useState(stdout?.columns ?? 80);
+	const mountedRef = useRef(true);
+
+	const onResize = useCallback(() => {
+		if (mountedRef.current && stdout) setWidth(stdout.columns);
+	}, [stdout]);
+
+	useEffect(() => {
+		if (!stdout) return;
+		stdout.on('resize', onResize);
+		return () => {
+			mountedRef.current = false;
+			stdout.off('resize', onResize);
+		};
+	}, [stdout, onResize]);
+
+	return width;
+}
 
 export function AppContent() {
-	const { stdout } = useStdout();
-	const termHeight = stdout?.rows ?? 24;
-	const termWidth = stdout?.columns ?? 80;
-
+	const termWidth = useTermWidth();
+	const narrativeWidth = Math.floor(termWidth * 0.55) - 8;
 	const tour = useTour();
 	const proc = useProcess();
 	const uiState = useUIState();
@@ -24,7 +44,6 @@ export function AppContent() {
 
 	const [selectedActionIdx, setSelectedActionIdx] = useState(0);
 
-	// Reset scroll and action selection on step change
 	const chapterIdx = tour.chapterIndex;
 	const stepIdx = tour.stepIndex;
 	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional trigger on step/chapter change
@@ -33,7 +52,6 @@ export function AppContent() {
 		setSelectedActionIdx(0);
 	}, [chapterIdx, stepIdx]);
 
-	// Handle Up/Down in action focus mode
 	useInput((_input, key) => {
 		if (uiState.focusPane !== 'actions') return;
 		if (key.upArrow) setSelectedActionIdx((prev) => Math.max(0, prev - 1));
@@ -43,7 +61,6 @@ export function AppContent() {
 			);
 	});
 
-	// Determine active process output
 	const activeProcesses = [...proc.processes.entries()];
 	const lastActive =
 		activeProcesses.length > 0
@@ -52,105 +69,86 @@ export function AppContent() {
 	const processLines = lastActive ? lastActive[1].output : [];
 	const processLabel = lastActive ? lastActive[1].actionLabel : '';
 
-	// Collect all step IDs for progress stepper
+	// Progress stepper dots
 	const allStepIds = tour.tour.chapters.flatMap((c) =>
 		c.steps.map((s) => s.id),
 	);
+	const stepper = allStepIds
+		.map((id, i) => {
+			if (i === tour.globalStepIndex) return '\u25CF';
+			if (i < tour.globalStepIndex) {
+				const v = tour.stepValidations.get(id);
+				if (v && v.state === 'passing') return '\u25CF';
+				return '\x1b[2m\u25CF\x1b[0m';
+			}
+			return '\u25CB';
+		})
+		.join(' ');
 
-	// Overlay rendering
-	if (uiState.activeOverlay === 'jump') {
-		return (
-			<Box
-				flexDirection="column"
-				width={termWidth}
-				height={termHeight}
-				borderStyle="round"
-				borderColor="blue"
-				paddingX={1}
-			>
-				<JumpOverlay
-					tour={tour.tour}
-					currentChapterId={tour.currentChapter.id}
-					currentStepId={tour.currentStep.id}
-					onJump={(cid, sid) => tour.jumpTo(cid, sid)}
-					onClose={() => uiState.setActiveOverlay('none')}
-				/>
-			</Box>
-		);
-	}
-
-	if (uiState.activeOverlay === 'help') {
-		return (
-			<Box
-				flexDirection="column"
-				width={termWidth}
-				height={termHeight}
-				borderStyle="round"
-				borderColor="blue"
-				paddingX={1}
-			>
-				<HelpOverlay onClose={() => uiState.setActiveOverlay('none')} />
-			</Box>
-		);
-	}
+	// Determine focused pane index for SplitPane (0 = left/narrative, 1 = right/activity)
+	const focusedPaneIndex = uiState.focusPane === 'narrative' ? 0 : 1;
 
 	return (
-		<Box
-			flexDirection="column"
-			width={termWidth}
-			height={termHeight}
-			borderStyle="round"
-			borderColor="blue"
-			paddingX={1}
-		>
-			<Header
-				tourName={tour.tour.name}
-				chapterTitle={tour.currentChapter.title}
-				chapterNumber={tour.chapterIndex}
-				stepNumber={tour.stepIndex}
-				totalSteps={tour.totalSteps}
-			/>
-
-			<Box flexDirection="row" flexGrow={1}>
-				<Box width="55%" flexDirection="column">
-					<NarrativePane
-						body={tour.currentStep.body}
-						scrollOffset={uiState.narrativeScroll}
-						focused={uiState.focusPane === 'narrative'}
+		<TUILayout
+			brand="blueprint"
+			theme={theme}
+			commands={commands}
+			deps={commandDeps}
+			helpTitle="YAOSGit blueprint - Keyboard Shortcuts"
+			helpSectionColors={SECTION_COLORS}
+			overlays={{
+				jump: () => (
+					<JumpOverlay
+						tour={tour.tour}
+						currentChapterId={tour.currentChapter.id}
+						currentStepId={tour.currentStep.id}
+						onJump={(cid, sid) => tour.jumpTo(cid, sid)}
+						onClose={() => uiState.setActiveOverlay('none')}
 					/>
-				</Box>
-				<Box width="45%" flexDirection="column">
-					<ActivityPane
-						actions={tour.currentStep.actions}
-						processes={proc.processes}
-						validate={tour.currentStep.validate}
-						required={tour.currentStep.required}
-						validationResult={tour.validation}
-						processLines={processLines}
-						processLabel={processLabel}
-						focusPane={uiState.focusPane}
-						selectedActionIndex={selectedActionIdx}
-						processScrollOffset={uiState.processScroll}
-						onRunAction={proc.runAction}
-					/>
-				</Box>
-			</Box>
-
-			{uiState.statusMessage && (
-				<Box paddingX={1}>
+				),
+			}}
+			header={
+				<Header
+					tourName={tour.tour.name}
+					chapterTitle={tour.currentChapter.title}
+					chapterNumber={tour.chapterIndex}
+					stepNumber={tour.stepIndex}
+					totalSteps={tour.totalSteps}
+				/>
+			}
+			statusBar={
+				uiState.statusMessage ? (
 					<Text dimColor>{uiState.statusMessage}</Text>
-				</Box>
-			)}
-
-			<ProgressFooter
-				commands={commands}
-				commandDeps={commandDeps}
-				chapterTitle={tour.currentChapter.title}
-				globalStepIndex={tour.globalStepIndex}
-				globalTotalSteps={tour.globalTotalSteps}
-				stepValidations={tour.stepValidations}
-				stepIds={allStepIds}
-			/>
-		</Box>
+				) : null
+			}
+			footerChildren={<Text dimColor>{stepper}</Text>}
+		>
+			<SplitPane
+				direction="horizontal"
+				ratio={[55, 45]}
+				focusedIndex={focusedPaneIndex}
+				theme={theme}
+				borders={[true, false]}
+			>
+				<NarrativePane
+					body={tour.currentStep.body}
+					scrollOffset={uiState.narrativeScroll}
+					width={narrativeWidth}
+				/>
+				<ActivityPane
+					actions={tour.currentStep.actions}
+					processes={proc.processes}
+					validate={tour.currentStep.validate}
+					required={tour.currentStep.required}
+					validationResult={tour.validation}
+					processLines={processLines}
+					processLabel={processLabel}
+					focusPane={uiState.focusPane}
+					selectedActionIndex={selectedActionIdx}
+					processScrollOffset={uiState.processScroll}
+					onRunAction={proc.runAction}
+				/>
+			</SplitPane>
+		</TUILayout>
 	);
 }

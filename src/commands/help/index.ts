@@ -3,10 +3,11 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const helpCommand: CommandHandler = {
 	id: 'HELP',
-	keys: ['h'],
+	keys: [{ textKey: 'h' }],
 	displayKey: 'h',
 	displayText: 'help',
 	helpSection: 'General',
+	helpLabel: 'Show help',
 	footer: 'priority',
 	isEnabled: (deps) => deps.uiState.activeOverlay === 'none',
 	execute: (deps) => deps.uiState.setActiveOverlay('help'),

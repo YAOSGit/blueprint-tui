@@ -3,7 +3,7 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const jumpCommand: CommandHandler = {
 	id: 'JUMP',
-	keys: ['j'],
+	keys: [{ textKey: 'j' }],
 	displayKey: 'j',
 	displayText: 'jump',
 	helpSection: 'Navigation',

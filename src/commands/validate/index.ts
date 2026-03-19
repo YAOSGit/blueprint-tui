@@ -3,7 +3,7 @@ import type { CommandHandler } from '../../providers/CommandsProvider/CommandsPr
 
 export const validateCommand: CommandHandler = {
 	id: 'VALIDATE',
-	keys: ['v'],
+	keys: [{ textKey: 'v' }],
 	displayKey: 'v',
 	displayText: 'validate',
 	helpSection: 'Actions',

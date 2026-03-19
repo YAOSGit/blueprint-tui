@@ -1,4 +1,4 @@
-// src/loader/loader.test.ts
+// src/utils/loader/loader.test.ts
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { loadTour } from './index.js';
