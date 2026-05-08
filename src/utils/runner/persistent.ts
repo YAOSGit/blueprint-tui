@@ -1,6 +1,7 @@
 // src/utils/runner/persistent.ts
-import { spawnProcess } from '@yaos-git/toolkit/tui/process';
+
 import type { ProcessHandle } from '@yaos-git/toolkit/tui/process';
+import { spawnProcess } from '@yaos-git/toolkit/tui/process';
 
 export type PersistentHandle = {
 	pid: number | null;

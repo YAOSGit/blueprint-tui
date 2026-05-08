@@ -13,6 +13,8 @@ export type ParsedStep = {
 export function parseFrontmatter(raw: string): ParsedStep {
 	return toolkitParseFrontmatter(
 		raw,
-		StepFrontmatterSchema as unknown as Parameters<typeof toolkitParseFrontmatter<StepFrontmatter>>[1],
+		StepFrontmatterSchema as unknown as Parameters<
+			typeof toolkitParseFrontmatter<StepFrontmatter>
+		>[1],
 	);
 }

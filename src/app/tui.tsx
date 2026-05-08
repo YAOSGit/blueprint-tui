@@ -1,7 +1,13 @@
 // src/app/tui.tsx
 import path from 'node:path';
+import {
+	createCLI,
+	fatalError,
+	formatError,
+	getExitCode,
+	runIfMain,
+} from '@yaos-git/toolkit/cli';
 import chalk from 'chalk';
-import { createCLI, fatalError, formatError, getExitCode, runIfMain } from '@yaos-git/toolkit/cli';
 import { render } from 'ink';
 import { loadTour } from '../utils/loader/index.js';
 import App from './index.js';
@@ -17,7 +23,10 @@ async function runTUI(args: string[] = process.argv.slice(2)): Promise<void> {
 
 	program
 		.argument('[path]', 'Path to .blueprint/ directory', '.blueprint')
-		.option('--jump <target>', 'Jump to chapter:step (e.g., architecture:data-layer)')
+		.option(
+			'--jump <target>',
+			'Jump to chapter:step (e.g., architecture:data-layer)',
+		)
 		.option('--editor <editor>', 'Override editor detection')
 		.action(
 			async (

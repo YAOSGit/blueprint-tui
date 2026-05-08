@@ -26,7 +26,12 @@ export function ProgressFooter({
 		.join(' ');
 
 	return (
-		<CommandFooter brand="blueprint" commands={commands} deps={commandDeps} theme={theme}>
+		<CommandFooter
+			brand="blueprint"
+			commands={commands}
+			deps={commandDeps}
+			theme={theme}
+		>
 			<Text dimColor>{stepper}</Text>
 		</CommandFooter>
 	);

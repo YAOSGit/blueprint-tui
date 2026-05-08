@@ -1,6 +1,7 @@
 // src/components/ProcessOutput/index.tsx
-import { Text } from 'ink';
+
 import { FocusablePane } from '@yaos-git/toolkit/tui/components';
+import { Text } from 'ink';
 import { theme } from '../../theme.js';
 import type { ProcessOutputProps } from './ProcessOutput.types.js';
 

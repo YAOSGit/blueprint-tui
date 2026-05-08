@@ -1,5 +1,6 @@
 // src/providers/TourProvider/index.tsx
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import type React from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import type { ValidationResult } from '../../types/Validation/index.js';
 import type {
 	TourContextValue,
@@ -36,8 +37,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 		Map<string, ValidationResult>
 	>(new Map());
 
-	const currentChapter = tour.chapters[chapterIndex];
-	const currentStep = currentChapter.steps[stepIndex];
+	const currentChapter = tour.chapters[chapterIndex]!;
+	const currentStep = currentChapter?.steps[stepIndex];
 
 	const globalTotalSteps = tour.chapters.reduce(
 		(sum, c) => sum + c.steps.length,
@@ -64,8 +65,16 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 			setStepIndex(stepIndex + 1);
 			return true;
 		}
-		if (chapterIndex < tour.chapters.length - 1) {
-			setChapterIndex(chapterIndex + 1);
+		// Move to next non-empty chapter (defense-in-depth for empty chapters)
+		let nextIdx = chapterIndex + 1;
+		while (
+			nextIdx < tour.chapters.length &&
+			tour.chapters[nextIdx]!.steps.length === 0
+		) {
+			nextIdx++;
+		}
+		if (nextIdx < tour.chapters.length) {
+			setChapterIndex(nextIdx);
 			setStepIndex(0);
 			return true;
 		}
@@ -77,9 +86,14 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 			setStepIndex(stepIndex - 1);
 			return true;
 		}
-		if (chapterIndex > 0) {
-			const prevChapter = tour.chapters[chapterIndex - 1];
-			setChapterIndex(chapterIndex - 1);
+		// Move to previous non-empty chapter (defense-in-depth for empty chapters)
+		let prevIdx = chapterIndex - 1;
+		while (prevIdx >= 0 && tour.chapters[prevIdx]!.steps.length === 0) {
+			prevIdx--;
+		}
+		if (prevIdx >= 0) {
+			const prevChapter = tour.chapters[prevIdx]!;
+			setChapterIndex(prevIdx);
 			setStepIndex(prevChapter.steps.length - 1);
 			return true;
 		}
@@ -87,8 +101,16 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 	}, [stepIndex, chapterIndex, tour]);
 
 	const nextChapter = useCallback((): boolean => {
-		if (chapterIndex < tour.chapters.length - 1) {
-			setChapterIndex(chapterIndex + 1);
+		// Skip empty chapters (defense-in-depth for empty chapters)
+		let nextIdx = chapterIndex + 1;
+		while (
+			nextIdx < tour.chapters.length &&
+			tour.chapters[nextIdx]!.steps.length === 0
+		) {
+			nextIdx++;
+		}
+		if (nextIdx < tour.chapters.length) {
+			setChapterIndex(nextIdx);
 			setStepIndex(0);
 			return true;
 		}
@@ -96,13 +118,18 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 	}, [chapterIndex, tour]);
 
 	const prevChapter = useCallback((): boolean => {
-		if (chapterIndex > 0) {
-			setChapterIndex(chapterIndex - 1);
+		// Skip empty chapters (defense-in-depth for empty chapters)
+		let prevIdx = chapterIndex - 1;
+		while (prevIdx >= 0 && tour.chapters[prevIdx]!.steps.length === 0) {
+			prevIdx--;
+		}
+		if (prevIdx >= 0) {
+			setChapterIndex(prevIdx);
 			setStepIndex(0);
 			return true;
 		}
 		return false;
-	}, [chapterIndex]);
+	}, [chapterIndex, tour]);
 
 	const jumpTo = useCallback(
 		(chapterId: string, stepId?: string): boolean => {

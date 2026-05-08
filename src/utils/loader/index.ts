@@ -16,6 +16,9 @@ export async function loadTour(
 	const raw = await walkBlueprint(blueprintDir);
 	const root = projectRoot ?? path.resolve(blueprintDir, '..');
 
+	// Step IDs must be globally unique across all chapters because they are used
+	// as keys for the validation state map (stepValidations in TourProvider).
+	// Cross-chapter reuse of step IDs would cause validation state collisions.
 	const seenStepIds = new Set<string>();
 	const seenChapterIds = new Set<string>();
 
@@ -57,15 +60,28 @@ export async function loadTour(
 		throw new Error('Tour has no steps');
 	}
 
-	// Pre-flight: check all teleport.file paths exist on disk
+	// Reject chapters with zero steps — empty chapters cause index-out-of-bounds at runtime
+	for (const chapter of chapters) {
+		if (chapter.steps.length === 0) {
+			throw new Error(`Chapter "${chapter.title}" has no steps`);
+		}
+	}
+
+	// Pre-flight: check all teleport.file paths exist on disk.
+	// Only throw when projectRoot was explicitly provided (runtime context);
+	// when inferred from blueprintDir the check is advisory since the inferred
+	// root may not match the actual project root at runtime.
 	for (const chapter of chapters) {
 		for (const step of chapter.steps) {
 			if (step.teleport) {
 				const absPath = path.resolve(root, step.teleport.file);
 				if (!fs.existsSync(absPath)) {
-					throw new Error(
-						`Step ${step.id}: teleport file ${step.teleport.file} not found`,
-					);
+					if (projectRoot) {
+						throw new Error(
+							`Step ${step.id}: teleport file ${step.teleport.file} not found (resolved to ${absPath})`,
+						);
+					}
+					// Advisory only — skip when root was inferred from blueprintDir
 				}
 			}
 		}

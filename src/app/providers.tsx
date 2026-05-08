@@ -1,5 +1,5 @@
 // src/app/providers.tsx
-import React from 'react';
+import type React from 'react';
 import { CommandsProvider } from '../providers/CommandsProvider/index.js';
 import { ProcessProvider } from '../providers/ProcessProvider/index.js';
 import { TourProvider } from '../providers/TourProvider/index.js';

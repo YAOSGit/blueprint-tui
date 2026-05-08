@@ -1,5 +1,6 @@
 // src/providers/UIStateProvider/index.tsx
-import React, {
+import type React from 'react';
+import {
 	createContext,
 	useCallback,
 	useEffect,

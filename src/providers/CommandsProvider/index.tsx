@@ -2,7 +2,8 @@
 import path from 'node:path';
 import { createCommandsProvider } from '@yaos-git/toolkit/tui/commands';
 import type { PendingConfirmation } from '@yaos-git/toolkit/types';
-import React, { useCallback, useMemo, useState } from 'react';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useProcess } from '../../hooks/useProcess/index.js';
 import { useTour } from '../../hooks/useTour/index.js';
 import { useUIState } from '../../hooks/useUIState/index.js';
@@ -96,7 +97,9 @@ export const CommandsProvider: React.FC<CommandsProviderProps> = ({
 		});
 	}, [tour]);
 
-	const [confirmation, setConfirmation] = useState<PendingConfirmation | null>(null);
+	const [confirmation, setConfirmation] = useState<PendingConfirmation | null>(
+		null,
+	);
 
 	const requestConfirmation = useCallback(
 		(message: string, onConfirm: () => void) => {
@@ -112,7 +115,9 @@ export const CommandsProvider: React.FC<CommandsProviderProps> = ({
 	const deps: CommandDeps = useMemo(
 		() => ({
 			ui: {
-				activeOverlay: confirmation ? 'confirmation' : uiState.activeOverlay as string | 'none',
+				activeOverlay: confirmation
+					? 'confirmation'
+					: (uiState.activeOverlay as string | 'none'),
 				setActiveOverlay: (overlay: string | 'none') => {
 					setConfirmation(null);
 					(uiState.setActiveOverlay as (o: string | 'none') => void)(overlay);
@@ -129,13 +134,21 @@ export const CommandsProvider: React.FC<CommandsProviderProps> = ({
 			onValidate,
 			onQuit,
 		}),
-		[tour, uiState, proc, onTeleport, onValidate, onQuit, confirmation, requestConfirmation, clearConfirmation],
+		[
+			tour,
+			uiState,
+			proc,
+			onTeleport,
+			onValidate,
+			onQuit,
+			confirmation,
+			requestConfirmation,
+			clearConfirmation,
+		],
 	);
 
 	return (
-		<ToolkitCommandsProvider deps={deps}>
-			{children}
-		</ToolkitCommandsProvider>
+		<ToolkitCommandsProvider deps={deps}>{children}</ToolkitCommandsProvider>
 	);
 };
 

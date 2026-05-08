@@ -1,6 +1,7 @@
 // src/providers/CommandsProvider/CommandsProvider.types.ts
-import type React from 'react';
+
 import type { BaseDeps, Command } from '@yaos-git/toolkit/types';
+import type React from 'react';
 
 import type { ProcessContextValue } from '../ProcessProvider/ProcessProvider.types.js';
 import type { TourContextValue } from '../TourProvider/TourProvider.types.js';

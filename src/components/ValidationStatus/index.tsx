@@ -1,6 +1,7 @@
 // src/components/ValidationStatus/index.tsx
-import { Box, Text } from 'ink';
+
 import { StatusIcon } from '@yaos-git/toolkit/tui/components';
+import { Box, Text } from 'ink';
 import type { ValidationStatusProps } from './ValidationStatus.types.js';
 
 export function ValidationStatus({

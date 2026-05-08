@@ -6,11 +6,11 @@ import { ActivityPane } from '../components/ActivityPane/index.js';
 import { Header } from '../components/Header/index.js';
 import { JumpOverlay } from '../components/JumpOverlay/index.js';
 import { NarrativePane } from '../components/NarrativePane/index.js';
-import { SECTION_COLORS } from '../providers/CommandsProvider/CommandsProvider.consts.js';
 import { useCommands } from '../hooks/useCommands/index.js';
 import { useProcess } from '../hooks/useProcess/index.js';
 import { useTour } from '../hooks/useTour/index.js';
 import { useUIState } from '../hooks/useUIState/index.js';
+import { SECTION_COLORS } from '../providers/CommandsProvider/CommandsProvider.consts.js';
 import { theme } from '../theme.js';
 
 function useTermWidth(): number {

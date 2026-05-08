@@ -1,6 +1,7 @@
 // src/components/ActionList/index.tsx
-import { Box, Text, useInput } from 'ink';
+
 import { StatusIcon } from '@yaos-git/toolkit/tui/components';
+import { Box, Text, useInput } from 'ink';
 import { theme } from '../../theme.js';
 import { STATUS_COLORS, STATUS_ICONS } from './ActionList.consts.js';
 import type { ActionListProps } from './ActionList.types.js';

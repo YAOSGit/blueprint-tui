@@ -8,7 +8,14 @@ import { ProgressFooter } from './index.js';
 const mockDeps = {
 	tour: { currentStep: { teleport: null, validate: null, actions: [] } },
 	uiState: { activeOverlay: 'none' },
-	ui: { activeOverlay: 'none', confirmation: null, setActiveOverlay: () => {}, requestConfirmation: () => {}, clearConfirmation: () => {}, cycleFocus: () => {} },
+	ui: {
+		activeOverlay: 'none',
+		confirmation: null,
+		setActiveOverlay: () => {},
+		requestConfirmation: () => {},
+		clearConfirmation: () => {},
+		cycleFocus: () => {},
+	},
 	process: {},
 	onTeleport: () => {},
 	onValidate: () => {},

@@ -1,16 +1,11 @@
 // src/providers/ProcessProvider/index.tsx
-import React, {
-	createContext,
-	useCallback,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import type React from 'react';
+import { createContext, useCallback, useMemo, useRef, useState } from 'react';
+import type { ProcessEntry } from '../../types/Process/index.js';
+import type { Action } from '../../types/Tour/index.js';
 import { runOneShot } from '../../utils/runner/oneShot.js';
 import type { PersistentHandle } from '../../utils/runner/persistent.js';
 import { spawnPersistent } from '../../utils/runner/persistent.js';
-import type { ProcessEntry } from '../../types/Process/index.js';
-import type { Action } from '../../types/Tour/index.js';
 import type {
 	ProcessContextValue,
 	ProcessProviderProps,

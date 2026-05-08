@@ -3,7 +3,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import YAML from 'yaml';
 import type { BlueprintMeta, ChapterMeta } from '../../types/Tour/index.js';
-import { BlueprintMetaSchema, ChapterMetaSchema } from '../../types/Tour/index.js';
+import {
+	BlueprintMetaSchema,
+	ChapterMetaSchema,
+} from '../../types/Tour/index.js';
 
 export type RawStep = {
 	id: string;

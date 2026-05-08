@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 import path from 'node:path';
+import {
+	createCLI,
+	fatalError,
+	formatError,
+	getExitCode,
+	runIfMain,
+} from '@yaos-git/toolkit/cli';
 import chalk from 'chalk';
-import { createCLI, fatalError, formatError, getExitCode, runIfMain } from '@yaos-git/toolkit/cli';
 import { loadTour } from '../utils/loader/index.js';
 
 declare const __CLI_VERSION__: string;
@@ -20,13 +26,20 @@ async function runCLI(args: string[] = process.argv.slice(2)): Promise<void> {
 			const resolvedPath = path.resolve(blueprintPath);
 			try {
 				const tour = await loadTour(resolvedPath);
-				const stepCount = tour.chapters.reduce((sum, c) => sum + c.steps.length, 0);
+				const stepCount = tour.chapters.reduce(
+					(sum, c) => sum + c.steps.length,
+					0,
+				);
 				process.stdout.write(
-					chalk.green(`\u2713 Valid tour: ${tour.name} (${tour.chapters.length} chapters, ${stepCount} steps)\n`),
+					chalk.green(
+						`\u2713 Valid tour: ${tour.name} (${tour.chapters.length} chapters, ${stepCount} steps)\n`,
+					),
 				);
 			} catch (err) {
 				const message = err instanceof Error ? err.message : String(err);
-				process.stderr.write(chalk.red(`\u2717 Validation failed: ${message}\n`));
+				process.stderr.write(
+					chalk.red(`\u2717 Validation failed: ${message}\n`),
+				);
 				process.exitCode = 1;
 				return;
 			}
@@ -46,7 +59,9 @@ async function runCLI(args: string[] = process.argv.slice(2)): Promise<void> {
 					);
 					for (const step of chapter.steps) {
 						const req = step.required ? chalk.yellow(' (required)') : '';
-						process.stdout.write(`  ${chalk.dim('\u00B7')} ${step.title}${req}\n`);
+						process.stdout.write(
+							`  ${chalk.dim('\u00B7')} ${step.title}${req}\n`,
+						);
 					}
 				}
 			} catch (err) {
