@@ -1,6 +1,6 @@
 {
 	"name": "@yaos-git/blueprint-tui",
-	"version": "126.1.0",
+	"version": "226.0.0",
 	"description": "Interactive codebase onboarding TUI \u2014 turn docs into executable journeys",
 	"main": "dist/cli.js",
 	"bin": {
